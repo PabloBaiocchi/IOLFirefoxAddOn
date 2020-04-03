@@ -191,6 +191,16 @@ function getPriceStrength(wAvgBuy,wAvgSell,price){
     return 0
 }
 
+function colorIndicator(element){
+    if(element.innerHTML.includes('-')){
+        element.style.color='red'
+    } else if(element.innerHTML=='0'){
+        element.style.color='black'
+    } else {
+        element.style.color='green'
+    }
+}
+
 function fillTable(table,data){
     volumeTotals=getVolumeTotals(data.cajaPuntas)
     
@@ -200,8 +210,9 @@ function fillTable(table,data){
     totalSell=document.getElementById('total_sell_volume')
     totalSell.innerHTML=volumeTotals.sell
     
-    volumeRatio=document.getElementById('demand_indicator')
-    volumeRatio.innerHTML=getDemandIndicator(volumeTotals)
+    demandIndicator=document.getElementById('demand_indicator')
+    demandIndicator.innerHTML=getDemandIndicator(volumeTotals)
+    colorIndicator(demandIndicator)
 
     wAvgBuyElement=document.getElementById('weighted_avg_buy')
     wAvgBuyValue=getWeightedAverage(data.cajaPuntas.buys,volumeTotals.buy)
@@ -213,6 +224,7 @@ function fillTable(table,data){
 
     priceStength=document.getElementById('price_strength')
     priceStength.innerHTML=getPriceStrength(wAvgBuyValue,wAvgSellValue,data.price)
+    colorIndicator(priceStength)
 }
 
 //RUN
