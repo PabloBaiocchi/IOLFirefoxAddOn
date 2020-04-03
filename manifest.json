@@ -1,0 +1,16 @@
+{
+
+    "manifest_version": 2,
+    "name": "Puntas",
+    "version": "1.0",
+  
+    "description": "does shit with caja de puntas",
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*.invertironline.com/Operar/*"],
+        "js": ["puntas.js"]
+      }
+    ]
+  
+  }
