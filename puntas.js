@@ -52,6 +52,22 @@ function weightedAvgRow(){
     return row
 }
 
+function priceStrengthRow(){
+    row=document.createElement('tr')
+    labelCell=document.createElement('td')
+    numberCell=document.createElement('td')
+
+    labelCell.appendChild(document.createTextNode('Price Strength'))
+
+    numberCell.setAttribute('id','price_strength')
+    numberCell.setAttribute('class','two_column')
+
+    row.appendChild(labelCell)
+    row.appendChild(numberCell)
+
+    return row
+}
+
 function styleTable(table){
     table.style.width='250px'
     table.style.height='100px'
@@ -77,6 +93,7 @@ function getTable(){
     body.appendChild(totalVolumeRow())
     body.appendChild(demandIndicatorRow())
     body.appendChild(weightedAvgRow())
+    body.appendChild(priceStrengthRow())
     table.appendChild(body)
     styleTable(table)
     return table
@@ -104,6 +121,22 @@ function getCajaPuntas(){
     return {
         buys: buys,
         sells: sells
+    }
+}
+
+function getPrice(){
+    spans=document.getElementsByTagName('span')
+    for(i=0;i<spans.length;++i){
+        if(spans[i].getAttribute('data-field')=='UltimoPrecio'){
+            return parseFloat(spans[i].innerText)
+        }
+    }
+}
+
+function getData(){
+    return {
+        cajaPuntas: getCajaPuntas(),
+        price: getPrice()
     }
 }
 
@@ -145,8 +178,21 @@ function getDemandIndicator(volumeTotals){
     return 0
 }
 
-function fillTable(table,puntas){
-    volumeTotals=getVolumeTotals(puntas)
+function getPriceStrength(wAvgBuy,wAvgSell,price){
+    buyDiff=price-wAvgBuy
+    sellDiff=wAvgSell-price
+
+    if(buyDiff>sellDiff){
+        return -1*buyDiff/sellDiff
+    }
+    if(sellDiff>buyDiff){
+        return sellDiff/buyDiff
+    }
+    return 0
+}
+
+function fillTable(table,data){
+    volumeTotals=getVolumeTotals(data.cajaPuntas)
     
     totalBuy=document.getElementById('total_buy_volume')
     totalBuy.innerHTML=volumeTotals.buy
@@ -157,11 +203,16 @@ function fillTable(table,puntas){
     volumeRatio=document.getElementById('demand_indicator')
     volumeRatio.innerHTML=getDemandIndicator(volumeTotals)
 
-    wAvgBuy=document.getElementById('weighted_avg_buy')
-    wAvgBuy.innerHTML=getWeightedAverage(puntas.buys,volumeTotals.buy)
+    wAvgBuyElement=document.getElementById('weighted_avg_buy')
+    wAvgBuyValue=getWeightedAverage(data.cajaPuntas.buys,volumeTotals.buy)
+    wAvgBuyElement.innerHTML=wAvgBuyValue
 
-    wAvgSell=document.getElementById('weighted_avg_sell')
-    wAvgSell.innerHTML=getWeightedAverage(puntas.sells,volumeTotals.sell)
+    wAvgSellElement=document.getElementById('weighted_avg_sell')
+    wAvgSellValue=getWeightedAverage(data.cajaPuntas.sells,volumeTotals.sell)
+    wAvgSellElement.innerHTML=wAvgSellValue
+
+    priceStength=document.getElementById('price_strength')
+    priceStength.innerHTML=getPriceStrength(wAvgBuyValue,wAvgSellValue,data.price)
 }
 
 //RUN
@@ -170,6 +221,6 @@ console.log('STARTING...')
 table=getTable()
 document.body.append(table)
 window.setInterval(()=>{
-    cajaPuntas=getCajaPuntas()
-    fillTable(table,cajaPuntas)
+    data=getData()
+    fillTable(table,data)
 },1000)
