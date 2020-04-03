@@ -18,14 +18,14 @@ function totalVolumeRow(){
     return row
 }
 
-function volumeRatioRow(){
+function demandIndicatorRow(){
     row=document.createElement('tr')
     labelCell=document.createElement('td')
     numberCell=document.createElement('td')
 
-    labelCell.appendChild(document.createTextNode('Volume buy:sell'))
+    labelCell.appendChild(document.createTextNode('Demand indicator'))
 
-    numberCell.setAttribute('id','volume_ratio')
+    numberCell.setAttribute('id','demand_indicator')
     numberCell.setAttribute('class','two_column')
 
     row.appendChild(labelCell)
@@ -75,7 +75,7 @@ function getTable(){
     table=document.createElement('table')
     body=document.createElement('tbody')
     body.appendChild(totalVolumeRow())
-    body.appendChild(volumeRatioRow())
+    body.appendChild(demandIndicatorRow())
     body.appendChild(weightedAvgRow())
     table.appendChild(body)
     styleTable(table)
@@ -135,6 +135,16 @@ function getWeightedAverage(array,volumeTotal){
     return volumePrice/volumeTotal 
 }
 
+function getDemandIndicator(volumeTotals){
+    if(volumeTotals.buy>volumeTotals.sell){
+        return volumeTotals.buy/volumeTotals.sell
+    }
+    if(volumeTotals.buy<volumeTotals.sell){
+        return -1*volumeTotals.sell/volumeTotals.buy
+    }
+    return 0
+}
+
 function fillTable(table,puntas){
     volumeTotals=getVolumeTotals(puntas)
     
@@ -144,8 +154,8 @@ function fillTable(table,puntas){
     totalSell=document.getElementById('total_sell_volume')
     totalSell.innerHTML=volumeTotals.sell
     
-    volumeRatio=document.getElementById('volume_ratio')
-    volumeRatio.innerHTML=volumeTotals.buy/volumeTotals.sell
+    volumeRatio=document.getElementById('demand_indicator')
+    volumeRatio.innerHTML=getDemandIndicator(volumeTotals)
 
     wAvgBuy=document.getElementById('weighted_avg_buy')
     wAvgBuy.innerHTML=getWeightedAverage(puntas.buys,volumeTotals.buy)
@@ -156,7 +166,7 @@ function fillTable(table,puntas){
 
 //RUN
 
-console.log('starting...')
+console.log('STARTING...')
 table=getTable()
 document.body.append(table)
 window.setInterval(()=>{
