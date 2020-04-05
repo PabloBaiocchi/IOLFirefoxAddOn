@@ -9,6 +9,7 @@
     "content_scripts": [
       {
         "matches": ["*://*.invertironline.com/Operar/*"],
+        "css":["styles.css"],
         "js": ["table.js","data.js","fillTable.js","main.js"]
       }
     ]
