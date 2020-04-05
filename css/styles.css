@@ -1,0 +1,12 @@
+#custom_table{
+    width: 250px;
+    height: 100px;
+    position: fixed;
+    top: 150px;
+    right: 100px;
+    background-color: white;
+}
+
+#custom_table td{
+    border: 1px solid black;
+}
