@@ -47,4 +47,5 @@ function setDraggable(_element){
     draggable.element=_element
     draggable.element.addEventListener('mousedown',onMouseDown)
     document.addEventListener('mouseup',onMouseUp)
+    draggable.element.style.cursor='pointer'
 }
