@@ -68,6 +68,12 @@ function priceStrengthRow(){
     return row
 }
 
+function tableOnClick(e){
+    table=document.getElementById('custom_table')
+    console.log(table)
+    table.style.top='400px'
+}
+
 function getTable(){
     table=document.createElement('table')
     table.setAttribute('id','custom_table')
@@ -77,5 +83,6 @@ function getTable(){
     body.appendChild(weightedAvgRow())
     body.appendChild(priceStrengthRow())
     table.appendChild(body)
+    setDraggable(table)
     return table
 }

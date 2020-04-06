@@ -10,7 +10,7 @@
       {
         "matches": ["*://*.invertironline.com/Operar/*"],
         "css":["./css/styles.css"],
-        "js": ["./js/table.js","./js/data.js","./js/fillTable.js","./js/main.js"]
+        "js": ["./js/draggable.js","./js/table.js","./js/data.js","./js/fillTable.js","./js/main.js"]
       }
     ]
   
