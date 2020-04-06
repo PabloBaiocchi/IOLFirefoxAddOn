@@ -1,9 +1,6 @@
 //GET INFOR FROM CAJA DE PUNTAS
 
-function getCajaPuntas(){
-    puntasTable=document.getElementsByClassName('tableListaPuntas')
-    tableBody=puntasTable[0].children[1]
-    tableRows=tableBody.children
+function parseTableRows(tableRows){
     buys=[]
     sells=[]
     for(i=0;i<tableRows.length;++i){
@@ -23,6 +20,29 @@ function getCajaPuntas(){
     }
 }
 
+function getCajaPuntasOperar(){
+    puntasTable=document.getElementsByClassName('tableListaPuntas')
+    tableBody=puntasTable[0].children[1]
+    tableRows=tableBody.children
+    return parseTableRows(tableRows)
+}
+
+function getCajaPuntasTitulo(){
+    puntasDiv=document.getElementById('puntas-cotizacion-titulo')
+    tableBody=puntasDiv.getElementsByTagName('tbody')
+    tableRows=tableBody[0].getElementsByTagName('tr')
+    return parseTableRows(tableRows)
+}
+
+function getCajaPuntas(siteLocation){
+    if(siteLocation=='OPERAR'){
+        return getCajaPuntasOperar()
+    }
+    if(siteLocation=='TITULO'){
+        return getCajaPuntasTitulo()
+    }
+}
+
 function getPrice(){
     spans=document.getElementsByTagName('span')
     for(i=0;i<spans.length;++i){
@@ -32,9 +52,24 @@ function getPrice(){
     }
 }
 
+function getSiteLocation(){
+    currentUrl=window.location.href.toString()
+
+    if(currentUrl.includes('www.invertironline.com/titulo')){
+        console.log('hello')
+        return 'TITULO'
+    }
+    if(currentUrl.includes('www.invertironline.com/Operar')){
+        console.log('here')
+        return 'OPERAR'
+    }
+}
+
 function getData(){
+    siteLocation=getSiteLocation()
+
     return {
-        cajaPuntas: getCajaPuntas(),
+        cajaPuntas: getCajaPuntas(siteLocation),
         price: getPrice()
     }
 }

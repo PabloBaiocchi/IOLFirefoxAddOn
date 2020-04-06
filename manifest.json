@@ -8,7 +8,7 @@
   
     "content_scripts": [
       {
-        "matches": ["*://*.invertironline.com/Operar/*"],
+        "matches": ["*://*.invertironline.com/Operar/*","*://*.invertironline.com/titulo/cotizacion/*"],
         "css":["./css/styles.css"],
         "js": ["./js/draggable.js","./js/table.js","./js/data.js","./js/fillTable.js","./js/main.js"]
       }
