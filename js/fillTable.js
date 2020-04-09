@@ -69,18 +69,18 @@ function fillTable(table,data){
     totalSell.innerHTML=volumeTotals.sell
     
     demandIndicator=document.getElementById('demand_indicator')
-    demandIndicator.innerHTML=getDemandIndicator(volumeTotals)
+    demandIndicator.innerHTML=getDemandIndicator(volumeTotals).toFixed(3)
     colorIndicator(demandIndicator)
 
     wAvgBuyElement=document.getElementById('weighted_avg_buy')
     wAvgBuyValue=getWeightedAverage(data.cajaPuntas.buys,volumeTotals.buy)
-    wAvgBuyElement.innerHTML=wAvgBuyValue
+    wAvgBuyElement.innerHTML=wAvgBuyValue.toFixed(3)
 
     wAvgSellElement=document.getElementById('weighted_avg_sell')
     wAvgSellValue=getWeightedAverage(data.cajaPuntas.sells,volumeTotals.sell)
-    wAvgSellElement.innerHTML=wAvgSellValue
+    wAvgSellElement.innerHTML=wAvgSellValue.toFixed(3)
 
     priceStength=document.getElementById('price_strength')
-    priceStength.innerHTML=getPriceStrength(wAvgBuyValue,wAvgSellValue,data.price)
+    priceStength.innerHTML=getPriceStrength(wAvgBuyValue,wAvgSellValue,data.price).toFixed(3)
     colorIndicator(priceStength)
 }

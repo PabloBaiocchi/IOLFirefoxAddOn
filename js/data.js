@@ -15,8 +15,49 @@ function parseTableRows(tableRows){
         })
     }
     return {
-        buys: buys,
-        sells: sells
+        'buys': buys,
+        'sells': sells
+    }
+}
+
+function trimTableRows(rows){
+    newrows=[]
+    for(i=1;i<rows.length;++i){
+        newrows.push(rows[i])
+    }
+    return newrows
+}
+
+function cleanPrice(priceText){
+    index=0
+    for(j=0;j<priceText.length;++j){
+        char=priceText.charAt(j)
+        if(char>='0' && char<='9'){
+            index=j
+            break
+        }
+    }
+    return priceText.substring(index)
+}
+
+function parseTableRowsPostMarket(rows){
+    rows=trimTableRows(rows)
+    buys=[]
+    sells=[]
+    for(i=0;i<rows.length;++i){
+        cells=rows[i].children
+        buys.push({
+            'volume':parseInt(cells[0].innerText.replace('.','')),
+            'price':parseFloat(cleanPrice(cells[1].innerText).replace(',','.'))
+        })
+        sells.push({
+            'volume':parseInt(cells[3].innerText.replace('.','')),
+            'price':parseFloat(cleanPrice(cells[2].innerText).replace(',','.'))
+        })
+    }
+    return {
+        'buys': buys,
+        'sells': sells
     }
 }
 
@@ -31,6 +72,10 @@ function getCajaPuntasTitulo(){
     puntasDiv=document.getElementById('puntas-cotizacion-titulo')
     tableBody=puntasDiv.getElementsByTagName('tbody')
     tableRows=tableBody[0].getElementsByTagName('tr')
+    if(tableRows.length>5){
+        // console.log(parseTableRowsPostMarket(tableRows))
+        return parseTableRowsPostMarket(tableRows)
+    }
     return parseTableRows(tableRows)
 }
 
@@ -47,7 +92,7 @@ function getPrice(){
     spans=document.getElementsByTagName('span')
     for(i=0;i<spans.length;++i){
         if(spans[i].getAttribute('data-field')=='UltimoPrecio'){
-            return parseFloat(spans[i].innerText)
+            return parseFloat(spans[i].innerText.replace(',','.'))
         }
     }
 }
@@ -56,11 +101,9 @@ function getSiteLocation(){
     currentUrl=window.location.href.toString()
 
     if(currentUrl.includes('www.invertironline.com/titulo')){
-        console.log('hello')
         return 'TITULO'
     }
     if(currentUrl.includes('www.invertironline.com/Operar')){
-        console.log('here')
         return 'OPERAR'
     }
 }
