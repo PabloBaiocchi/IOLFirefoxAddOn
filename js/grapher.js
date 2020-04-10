@@ -102,6 +102,7 @@ function drawStreams(graph,printStreams){
 
 function drawGraph(graph){
     if(setYAxis(graph)){
+        graph.ctx.clearRect(0,0,graph.canvas.width,graph.canvas.height)
         xInterval=getXInterval(graph)
         printStreams=translateGraph(graph,xInterval)
         drawStreams(graph,printStreams)
