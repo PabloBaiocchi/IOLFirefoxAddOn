@@ -12,3 +12,14 @@
     border: 1px solid black;
     text-align: center;
 }
+
+#graph{
+    width: 400px;
+    height: 350px;
+    position: fixed;
+    top: 150px;
+    left: 100px;
+    border: 1px solid black;
+    background-color: white;
+    z-index: 50000000;
+}
