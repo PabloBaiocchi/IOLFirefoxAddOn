@@ -9,6 +9,8 @@ console.log('STARTING...')
 // },1000)
 
 graph=createGraph()
+addStream(graph,'my_line','green')
+addStream(graph,'the_line','red')
 pushData(graph,{
     streamName: 'my_line',
     value: 2
@@ -17,4 +19,21 @@ pushData(graph,{
     streamName: 'my_line',
     value: 6
 })
-console.log(graph)
+pushData(graph,{
+    streamName: 'the_line',
+    value: 3
+})
+pushData(graph,{
+    streamName: 'my_line',
+    value: 7
+})
+pushData(graph,{
+    streamName: 'the_line',
+    value: 4
+})
+pushData(graph,{
+    streamName: 'my_line',
+    value: 0
+})
+drawGraph(graph)
+
