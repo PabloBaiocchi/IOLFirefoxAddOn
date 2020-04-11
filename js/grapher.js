@@ -44,9 +44,15 @@ function setYAxis(graph){
         }
     }
     range=max-min
+    min=min-.1*range
+    max=max+.1*range
+    range=max-min
     graph.yAxis={
-        min: min-.1*range,
-        max: max+.1*range
+        q0: min,
+        q1:min+range*1/4,
+        q2:min+range/2,
+        q3:min+range*3/4,
+        q4: max
     }
     return true
 }
@@ -67,7 +73,7 @@ function translateGraph(graph,xInterval){
     for(i=0;i<graph.dataStreams.length;++i){
         printStreams.push({
             color:graph.dataStreams[i].color,
-            data:translateData(graph.dataStreams[i].data,graph.yAxis.min,graph.yAxis.max,graph.canvas.height,xInterval)
+            data:translateData(graph.dataStreams[i].data,graph.yAxis.q0,graph.yAxis.q4,graph.canvas.height,xInterval)
         })
     }
     return printStreams
@@ -100,20 +106,93 @@ function drawStreams(graph,printStreams){
     }
 }
 
+function drawYAxisDashes(graph,dashLength){
+    graph.ctx.strokeStyle='black'
+    for(i=1;i<4;++i){
+        graph.ctx.beginPath()
+        graph.ctx.moveTo(graph.canvas.width,graph.canvas.height*i/4)
+        graph.ctx.lineTo(graph.canvas.width-dashLength,graph.canvas.height*i/4)
+        graph.ctx.stroke()
+    }
+}
+
 function drawGraph(graph){
     if(setYAxis(graph)){
+        updateYLabels(graph)
         graph.ctx.clearRect(0,0,graph.canvas.width,graph.canvas.height)
+        drawYAxisDashes(graph,5)
         xInterval=getXInterval(graph)
         printStreams=translateGraph(graph,xInterval)
         drawStreams(graph,printStreams)
     }
 }
 
+function addYLabels(container,canvasHeight){
+    console.log(canvasHeight)
+    q4=document.createElement('div')
+    q4.setAttribute('id','q4')
+    q4.classList.add('y_label')
+    q4.innerText='q4'
+    q4.style.top='-2px'
+
+    q3=document.createElement('div')
+    q3.setAttribute('id','q3')
+    q3.classList.add('y_label')
+    q3.innerText='q3'
+    q3.style.top=-2+canvasHeight/4+'px'
+
+    q2=document.createElement('div')
+    q2.setAttribute('id','q2')
+    q2.classList.add('y_label')
+    q2.innerText='q2'
+    q2.style.top=-2+canvasHeight/4*2+'px'
+
+    q1=document.createElement('div')
+    q1.setAttribute('id','q1')
+    q1.classList.add('y_label')
+    q1.innerText='q1'
+    q1.style.top=-2+canvasHeight/4*3+'px'
+    
+
+    q0=document.createElement('div')
+    q0.setAttribute('id','q0')
+    q0.classList.add('y_label')
+    q0.innerText='q0'
+    q0.style.top=-2+canvasHeight+'px'
+
+    container.appendChild(q0)
+    container.appendChild(q1)
+    container.appendChild(q2)
+    container.appendChild(q3)
+    container.appendChild(q4)
+}
+
+function updateYLabels(graph){
+    q4=document.getElementById('q4')
+    q4.innerText=graph.yAxis.q4.toFixed(2)
+
+    q3=document.getElementById('q3')
+    q3.innerText=graph.yAxis.q3.toFixed(2)
+
+    q2=document.getElementById('q2')
+    q2.innerText=graph.yAxis.q2.toFixed(2)
+
+    q1=document.getElementById('q1')
+    q1.innerText=graph.yAxis.q1.toFixed(2)
+
+    q0=document.getElementById('q0')
+    q0.innerText=graph.yAxis.q0.toFixed(2)
+}
+
 function createGraph(){
     canvas=document.createElement('canvas')
     canvas.setAttribute('id','graph')
     ctx=canvas.getContext('2d')
-    document.body.append(this.canvas)
+    container=document.createElement('div')
+    container.setAttribute('id','graph_container')
+    container.appendChild(canvas)
+    document.body.append(container)
+    addYLabels(container,canvas.clientHeight)
     return{
         canvas:canvas,
         ctx:ctx,
