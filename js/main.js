@@ -9,6 +9,7 @@ console.log('STARTING...')
 // },1000)
 
 graph=createGraph()
+enableSidePanel(graph)
 addStream(graph,'my_line','green')
 addStream(graph,'the_line','red')
 
