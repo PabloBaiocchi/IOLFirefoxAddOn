@@ -299,8 +299,12 @@ function enableSidePanel(graph){
     dpInput.value=graph.xMax
     dpButton.addEventListener('click',()=>{
         dpInput=document.getElementById('dp_input')
-        graph.xMax=parseInt(dpInput.value)
-        drawGraph(graph)
+        typecheck=parseInt(dpInput.value)
+        if(isNaN(parseInt(dpInput.value))){
+            return 
+        }
+        graph.xMax=typecheck
+        drawGraph(graph) 
     })
 }
 
