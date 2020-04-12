@@ -123,12 +123,18 @@ function drawStreams(graph,printStreams){
     }
 }
 
-function drawYAxisDashes(graph,dashLength){
+function drawAxisDashes(graph,dashLength){
     graph.ctx.strokeStyle='black'
     for(i=1;i<4;++i){
         graph.ctx.beginPath()
         graph.ctx.moveTo(graph.canvas.width,graph.canvas.height*i/4)
         graph.ctx.lineTo(graph.canvas.width-dashLength,graph.canvas.height*i/4)
+        graph.ctx.stroke()
+    }
+    for(i=1;i<4;++i){
+        graph.ctx.beginPath()
+        graph.ctx.moveTo(graph.canvas.width*i/4,graph.canvas.height)
+        graph.ctx.lineTo(graph.canvas.width*i/4,graph.canvas.height-dashLength)
         graph.ctx.stroke()
     }
 }
@@ -137,7 +143,7 @@ function drawGraph(graph){
     if(setYAxis(graph)){
         updateYLabels(graph) 
         graph.ctx.clearRect(0,0,graph.canvas.width,graph.canvas.height)
-        drawYAxisDashes(graph,5)
+        drawAxisDashes(graph,5)
         xInterval=getXInterval(graph) 
         printStreams=translateGraph(graph,xInterval) 
         drawStreams(graph,printStreams) 
@@ -213,6 +219,6 @@ function createGraph(){
         canvas:canvas,
         ctx:ctx,
         dataStreams:[], 
-        xMax: 5
+        xMax: 20
     }
 }
