@@ -139,9 +139,34 @@ function drawAxisDashes(graph,dashLength){
     }
 }
 
+function updateXLabels(graph){
+    dataPoints=0
+    for(i=0;i<graph.dataStreams.length;++i){
+        if(graph.dataStreams[i].data.length>dataPoints){
+            dataPoints=graph.dataStreams[i].data.length
+        }
+    }
+    if(dataPoints>graph.xMax){
+        dataPoints=graph.xMax
+    }
+
+    xq1=document.getElementById('xq1')
+    xq1.innerText=(dataPoints-1)/4
+
+    xq2=document.getElementById('xq2')
+    xq2.innerText=(dataPoints-1)/2
+
+    xq3=document.getElementById('xq3')
+    xq3.innerText=(dataPoints-1)/4*3
+
+    xq4=document.getElementById('xq4')
+    xq4.innerText=(dataPoints-1)
+}
+
 function drawGraph(graph){
     if(setYAxis(graph)){
         updateYLabels(graph) 
+        updateXLabels(graph)
         graph.ctx.clearRect(0,0,graph.canvas.width,graph.canvas.height)
         drawAxisDashes(graph,5)
         xInterval=getXInterval(graph) 
@@ -150,60 +175,95 @@ function drawGraph(graph){
     }
 }
 
-function addYLabels(container,canvasHeight){
-    q4=document.createElement('div')
-    q4.setAttribute('id','q4')
-    q4.classList.add('y_label')
-    q4.innerText='q4'
-    q4.style.top='-2px'
+function addLabels(container,canvasHeight,canvasWidth){
+    yq4=document.createElement('div')
+    yq4.setAttribute('id','yq4')
+    yq4.classList.add('y_label')
+    yq4.innerText='yq4'
+    yq4.style.top='-2px'
 
-    q3=document.createElement('div')
-    q3.setAttribute('id','q3')
-    q3.classList.add('y_label')
-    q3.innerText='q3'
-    q3.style.top=-2+canvasHeight/4+'px'
+    yq3=document.createElement('div')
+    yq3.setAttribute('id','yq3')
+    yq3.classList.add('y_label')
+    yq3.innerText='yq3'
+    yq3.style.top=-2+canvasHeight/4+'px'
 
-    q2=document.createElement('div')
-    q2.setAttribute('id','q2')
-    q2.classList.add('y_label')
-    q2.innerText='q2'
-    q2.style.top=-2+canvasHeight/4*2+'px'
+    yq2=document.createElement('div')
+    yq2.setAttribute('id','yq2')
+    yq2.classList.add('y_label')
+    yq2.innerText='yq2'
+    yq2.style.top=-2+canvasHeight/4*2+'px'
 
-    q1=document.createElement('div')
-    q1.setAttribute('id','q1')
-    q1.classList.add('y_label')
-    q1.innerText='q1'
-    q1.style.top=-2+canvasHeight/4*3+'px'
+    yq1=document.createElement('div')
+    yq1.setAttribute('id','yq1')
+    yq1.classList.add('y_label')
+    yq1.innerText='yq1'
+    yq1.style.top=-2+canvasHeight/4*3+'px'
     
 
-    q0=document.createElement('div')
-    q0.setAttribute('id','q0')
-    q0.classList.add('y_label')
-    q0.innerText='q0'
-    q0.style.top=-2+canvasHeight+'px'
+    yq0=document.createElement('div')
+    yq0.setAttribute('id','yq0')
+    yq0.classList.add('y_label')
+    yq0.innerText='yq0'
+    yq0.style.top=-2+canvasHeight+'px'
 
-    container.appendChild(q0)
-    container.appendChild(q1)
-    container.appendChild(q2)
-    container.appendChild(q3)
-    container.appendChild(q4)
+    xq4=document.createElement('div')
+    xq4.setAttribute('id','xq4')
+    xq4.classList.add('x_label')
+    xq4.innerText='xq4'
+    xq4.style.left='2px'
+
+    xq3=document.createElement('div')
+    xq3.setAttribute('id','xq3')
+    xq3.classList.add('x_label')
+    xq3.innerText='xq3'
+    xq3.style.left=2+canvasWidth/4+'px'
+
+    xq2=document.createElement('div')
+    xq2.setAttribute('id','xq2')
+    xq2.classList.add('x_label')
+    xq2.innerText='xq2'
+    xq2.style.left=2+canvasWidth/2+'px'
+
+    xq1=document.createElement('div')
+    xq1.setAttribute('id','xq1')
+    xq1.classList.add('x_label')
+    xq1.innerText='xq1'
+    xq1.style.left=2+canvasWidth/4*3+'px'
+
+    xq0=document.createElement('div')
+    xq0.setAttribute('id','xq0')
+    xq0.classList.add('x_label')
+    xq0.innerText='0'
+    xq0.style.left=canvasWidth+'px'
+
+    container.appendChild(yq0)
+    container.appendChild(yq1)
+    container.appendChild(yq2)
+    container.appendChild(yq3)
+    container.appendChild(yq4)
+    container.appendChild(xq4)
+    container.appendChild(xq3)
+    container.appendChild(xq2)
+    container.appendChild(xq1)
+    container.appendChild(xq0)
 }
 
 function updateYLabels(graph){
-    q4=document.getElementById('q4')
-    q4.innerText=graph.yAxis.q4.toFixed(2)
+    yq4=document.getElementById('yq4')
+    yq4.innerText=graph.yAxis.q4.toFixed(2)
 
-    q3=document.getElementById('q3')
-    q3.innerText=graph.yAxis.q3.toFixed(2)
+    yq3=document.getElementById('yq3')
+    yq3.innerText=graph.yAxis.q3.toFixed(2)
 
-    q2=document.getElementById('q2')
-    q2.innerText=graph.yAxis.q2.toFixed(2)
+    yq2=document.getElementById('yq2')
+    yq2.innerText=graph.yAxis.q2.toFixed(2)
 
-    q1=document.getElementById('q1')
-    q1.innerText=graph.yAxis.q1.toFixed(2)
+    yq1=document.getElementById('yq1')
+    yq1.innerText=graph.yAxis.q1.toFixed(2)
 
-    q0=document.getElementById('q0')
-    q0.innerText=graph.yAxis.q0.toFixed(2)
+    yq0=document.getElementById('yq0')
+    yq0.innerText=graph.yAxis.q0.toFixed(2)
 }
 
 function createGraph(){
@@ -214,7 +274,7 @@ function createGraph(){
     container.setAttribute('id','graph_container')
     container.appendChild(canvas)
     document.body.append(container)
-    addYLabels(container,canvas.clientHeight)
+    addLabels(container,canvas.clientHeight,canvas.clientWidth)
     return{
         canvas:canvas,
         ctx:ctx,

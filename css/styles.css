@@ -19,7 +19,7 @@
     border: 1px solid black;
     background-color: white;
     margin-left: 50px;
-    margin: 5px 50px 5px 5px;
+    margin: 5px 50px 25px 5px;
 }
 
 #graph_container{
@@ -34,4 +34,9 @@
 .y_label{
     position: absolute;
     right: 16px;
+}
+
+.x_label{
+    position: absolute;
+    bottom:5px;
 }
