@@ -15,26 +15,33 @@ function addStream(graph,name,color){
     })
 }
 
-function firstVal(streams){
-    if(streams.length==0){
+function firstVal(graph){
+    if(graph.dataStreams.length==0){
         return 
     }
-    for(i=0;i<streams.length;++i){
-        if(streams[i].data.length>0){
-            return streams[i].data[0]
+    for(i=0;i<graph.dataStreams.length;++i){
+        if(graph.dataStreams[i].data.length>0){
+            if(graph.dataStreams[i].data.length>graph.xMax){
+                return graph.dataStreams[i].data[graph.dataStreams[i].data.length-graph.xMax]
+            }
+            return graph.dataStreams[i].data[0]
         }
     }
 }
 
 function setYAxis(graph){
-    value=firstVal(graph.dataStreams)
+    value=firstVal(graph)
     if(!value){
         return false
     }
     min=value
     max=value
     for(i=0;i<graph.dataStreams.length;++i){
-        for(j=0;j<graph.dataStreams[i].data.length;++j){
+        startIndex=0
+        if(graph.dataStreams[i].data.length>graph.xMax){
+            startIndex=graph.dataStreams[i].data.length-graph.xMax
+        }
+        for(j=startIndex;j<graph.dataStreams[i].data.length;++j){
             currentVal=graph.dataStreams[i].data[j]
             if(currentVal>max){
                 max=currentVal
@@ -57,13 +64,19 @@ function setYAxis(graph){
     return true
 }
 
-function translateData(data,axisMin,axisMax,canvasHeight,xInterval){
+function translateData(data,yMin,yMax,canvasHeight,xInterval,xMax){
     printData=[]
-    for(k=0;k<data.length;++k){
+    startIndex=0
+    if(data.length>xMax){
+        startIndex=data.length-xMax
+    }
+    counter=0
+    for(k=startIndex;k<data.length;++k){
         printData.push({
-            x:k*xInterval,
-            y:(1-(data[k]-axisMin)/(axisMax-axisMin))*canvasHeight
+            x:counter*xInterval,
+            y:(1-(data[k]-yMin)/(yMax-yMin))*canvasHeight
         })
+        counter=counter+1
     }
     return printData
 }
@@ -73,7 +86,7 @@ function translateGraph(graph,xInterval){
     for(i=0;i<graph.dataStreams.length;++i){
         printStreams.push({
             color:graph.dataStreams[i].color,
-            data:translateData(graph.dataStreams[i].data,graph.yAxis.q0,graph.yAxis.q4,graph.canvas.height,xInterval)
+            data:translateData(graph.dataStreams[i].data,graph.yAxis.q0,graph.yAxis.q4,graph.canvas.height,xInterval,graph.xMax)
         })
     }
     return printStreams
@@ -87,7 +100,11 @@ function getXInterval(graph){
             maxLength=streamLength
         }
     }
-    return graph.canvas.width/maxLength
+    if(maxLength<graph.xMax){
+        return graph.canvas.width/maxLength
+    } else {
+        return graph.canvas.width/graph.xMax
+    }
 }
 
 function drawStream(stream,ctx){
@@ -118,17 +135,16 @@ function drawYAxisDashes(graph,dashLength){
 
 function drawGraph(graph){
     if(setYAxis(graph)){
-        updateYLabels(graph)
+        updateYLabels(graph) 
         graph.ctx.clearRect(0,0,graph.canvas.width,graph.canvas.height)
         drawYAxisDashes(graph,5)
-        xInterval=getXInterval(graph)
-        printStreams=translateGraph(graph,xInterval)
-        drawStreams(graph,printStreams)
+        xInterval=getXInterval(graph) 
+        printStreams=translateGraph(graph,xInterval) 
+        drawStreams(graph,printStreams) 
     }
 }
 
 function addYLabels(container,canvasHeight){
-    console.log(canvasHeight)
     q4=document.createElement('div')
     q4.setAttribute('id','q4')
     q4.classList.add('y_label')
@@ -196,6 +212,7 @@ function createGraph(){
     return{
         canvas:canvas,
         ctx:ctx,
-        dataStreams:[]
+        dataStreams:[], 
+        xMax: 5
     }
 }
