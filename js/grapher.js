@@ -101,9 +101,9 @@ function getXInterval(graph){
         }
     }
     if(maxLength<graph.xMax){
-        return graph.canvas.width/maxLength
+        return graph.canvas.width/(maxLength-1)
     } else {
-        return graph.canvas.width/graph.xMax
+        return graph.canvas.width/(graph.xMax-1)
     }
 }
 
