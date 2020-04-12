@@ -211,31 +211,31 @@ function addLabels(container,canvasHeight,canvasWidth){
     xq4.setAttribute('id','xq4')
     xq4.classList.add('x_label')
     xq4.innerText='xq4'
-    xq4.style.left='2px'
+    xq4.style.left='92px'
 
     xq3=document.createElement('div')
     xq3.setAttribute('id','xq3')
     xq3.classList.add('x_label')
     xq3.innerText='xq3'
-    xq3.style.left=2+canvasWidth/4+'px'
+    xq3.style.left=92+canvasWidth/4+'px'
 
     xq2=document.createElement('div')
     xq2.setAttribute('id','xq2')
     xq2.classList.add('x_label')
     xq2.innerText='xq2'
-    xq2.style.left=2+canvasWidth/2+'px'
+    xq2.style.left=92+canvasWidth/2+'px'
 
     xq1=document.createElement('div')
     xq1.setAttribute('id','xq1')
     xq1.classList.add('x_label')
     xq1.innerText='xq1'
-    xq1.style.left=2+canvasWidth/4*3+'px'
+    xq1.style.left=92+canvasWidth/4*3+'px'
 
     xq0=document.createElement('div')
     xq0.setAttribute('id','xq0')
     xq0.classList.add('x_label')
     xq0.innerText='0'
-    xq0.style.left=canvasWidth+'px'
+    xq0.style.left=92+canvasWidth+'px'
 
     container.appendChild(yq0)
     container.appendChild(yq1)
@@ -266,6 +266,44 @@ function updateYLabels(graph){
     yq0.innerText=graph.yAxis.q0.toFixed(2)
 }
 
+function createSidePanel(){
+    panel=document.createElement('div')
+    panel.setAttribute('id','graph_side_panel')
+
+    dataPointsPanel=document.createElement('div')
+    dataPointsPanel.setAttribute('id','data_points_panel')
+
+    dpLabel=document.createElement('div')
+    dpLabel.innerText='Data points displayed'
+
+    dpInput=document.createElement('input')
+    dpInput.setAttribute('id','dp_input')
+    dpInput.classList.add('panel_input')
+
+    dpButton=document.createElement('button')
+    dpButton.setAttribute('id','dp_button')
+    dpButton.classList.add('panel_button')
+    dpButton.innerText='Update'
+
+    dataPointsPanel.appendChild(dpLabel)
+    dataPointsPanel.appendChild(dpInput)
+    dataPointsPanel.appendChild(dpButton)
+    panel.appendChild(dataPointsPanel)
+
+    return panel
+}
+
+function enableSidePanel(graph){
+    dpButton=document.getElementById('dp_button')
+    dpInput=document.getElementById('dp_input')
+    dpInput.value=graph.xMax
+    dpButton.addEventListener('click',()=>{
+        dpInput=document.getElementById('dp_input')
+        graph.xMax=parseInt(dpInput.value)
+        drawGraph(graph)
+    })
+}
+
 function createGraph(){
     canvas=document.createElement('canvas')
     canvas.setAttribute('id','graph')
@@ -275,6 +313,7 @@ function createGraph(){
     container.appendChild(canvas)
     document.body.append(container)
     addLabels(container,canvas.clientHeight,canvas.clientWidth)
+    container.appendChild(createSidePanel())
     return{
         canvas:canvas,
         ctx:ctx,
