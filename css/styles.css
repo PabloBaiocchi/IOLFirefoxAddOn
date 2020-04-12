@@ -24,7 +24,7 @@
 
 #graph_container{
     position: fixed;
-    top: 150px;
+    bottom: 150px;
     left: 100px;
     z-index: 50000000;
     border: 1px solid black;
